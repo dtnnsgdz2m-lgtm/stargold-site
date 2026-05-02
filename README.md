@@ -1,0 +1,2 @@
+# stargold-site
+WEBSITE HOSTING FOR STARGOLD
