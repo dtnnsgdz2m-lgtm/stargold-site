@@ -1,6 +1,5 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-		<!--	created with www.mysitemapgenerator.com	-->
-		<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 	<loc>https://stargold-site.vercel.app/</loc>
 	<lastmod>2026-05-03T11:20:20+01:00</lastmod>
@@ -9,11 +8,6 @@
 <url>
 	<loc>https://stargold-site.vercel.app/support.html</loc>
 	<lastmod>2026-05-03T11:20:20+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
-	<loc>https://stargold-site.vercel.app/index.html</loc>
-	<lastmod>2026-05-03T11:20:21+01:00</lastmod>
-	<priority>1.0</priority>
+	<priority>0.8</priority>
 </url>
 </urlset>
