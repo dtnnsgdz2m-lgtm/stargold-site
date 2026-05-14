@@ -45,11 +45,15 @@ function normalizeRecord(raw) {
   const description = normalized.descricao || normalized.description || "";
   const priceRaw = normalized.preco || normalized.price || "";
   const highlightRaw = normalized.destaque || normalized.highlight || "";
+  const category = normalized.categoria || normalized.category || "";
+  const color = normalized.cor || normalized.color || "";
 
   return {
     imagem: String(image || "").trim(),
     referencia: String(reference || "").trim(),
     descricao: String(description || "").trim(),
+    categoria: String(category || "").trim(),
+    cor: String(color || "").trim(),
     preco: normalizePrice(priceRaw),
     destaque: normalizeBoolean(highlightRaw)
   };
@@ -163,10 +167,69 @@ function renderProductGrid(products) {
       <div class="product-content">
         <p class="product-ref">Ref: ${escapeHtml(p.referencia)}</p>
         <p>${escapeHtml(p.descricao)}</p>
+        <p class="product-category">${escapeHtml(p.categoria || "")}</p>
+        <p class="product-color">${escapeHtml(p.cor || "")}</p>
         <span class="price">${formatPrice(p.preco)}</span>
       </div>
     </article>
   `).join("");
+}
+
+function applyFilters() {
+  const categorySelect = document.getElementById("categoria-filter");
+  const colorSelect = document.getElementById("cor-filter");
+
+  if (!categorySelect || !colorSelect) {
+    renderProductGrid(catalogProducts);
+    return;
+  }
+
+  const selectedCategory = categorySelect.value;
+  const selectedColor = colorSelect.value;
+
+  const filteredProducts = catalogProducts.filter((product) => {
+    const categoryMatch = !selectedCategory || product.categoria === selectedCategory;
+    const colorMatch = !selectedColor || product.cor === selectedColor;
+
+    return categoryMatch && colorMatch;
+  });
+
+  renderProductGrid(filteredProducts);
+}
+
+function setupFilters() {
+  const grid = document.getElementById("product-grid");
+
+  if (!grid) return;
+
+  const filtersHTML = `
+    <div class="catalog-filters">
+      <select id="categoria-filter">
+        <option value="">Todas as categorias</option>
+        <option value="Colares curtos">Colares curtos</option>
+        <option value="Colares compridos">Colares compridos</option>
+        <option value="Pulseiras">Pulseiras</option>
+        <option value="Brincos">Brincos</option>
+        <option value="Anéis">Anéis</option>
+      </select>
+
+      <select id="cor-filter">
+        <option value="">Todas as cores</option>
+        <option value="Dourado">Dourado</option>
+        <option value="Prateado">Prateado</option>
+      </select>
+    </div>
+  `;
+
+  grid.insertAdjacentHTML("beforebegin", filtersHTML);
+
+  document
+    .getElementById("categoria-filter")
+    .addEventListener("change", applyFilters);
+
+  document
+    .getElementById("cor-filter")
+    .addEventListener("change", applyFilters);
 }
 
 async function initCatalog() {
@@ -174,6 +237,7 @@ async function initCatalog() {
   try {
     const products = await loadProductsFromExcel();
     catalogProducts = products;
+    setupFilters();
     renderHighlights(products);
     renderProductGrid(products);
     if(note) note.textContent = `Catálogo atualizado: ${products.length} produtos.`;
